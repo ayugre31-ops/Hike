@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hike Plan</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<div class="container">
+    <h1>Hello 👋</h1>
+
+    <p class="fade">Are you down to hike on</p>
+    <h2 class="fade">May 17?</h2>
+
+    <p class="fade">P.S. I'm not taking no for an answer this time lol</p>
+    <p class="fade">but still you've 2 options to choose from</p>
+
+    <div class="buttons">
+        <button class="yes-btn" onclick="handleYes()">Okay fine, let’s go 😄</button>
+        <button class="no-btn" onclick="handleNo()">No cuz Pilates 😢</button>
+    </div>
+</div>
+
+<!-- NO Popup -->
+<div id="popup" class="popup">
+    <div class="popup-content">
+        <p>It was a trick question 😏<br>NO is not an option haha</p>
+        <button onclick="closePopup()">Okay okay 😄</button>
+    </div>
+</div>
+
+<!-- YES Popup -->
+<div id="yesPopup" class="popup">
+    <div class="popup-content yes-style">
+        <p>🎉 Okay this is actually going to be fun 😄<br>May 17 is officially a hike date 🏔️</p>
+        <button onclick="closeYesPopup()">Can’t wait 😄</button>
+    </div>
+</div>
+
+<!-- Balloons -->
+<div id="balloons"></div>
+
+<script>
+function sendLog(action) {
+    fetch("/log", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ action: action })
+    });
+}
+
+function handleYes() {
+    sendLog("YES");
+    createBalloons();
+    document.getElementById("yesPopup").style.display = "flex";
+}
+
+function handleNo() {
+    sendLog("NO");
+    document.getElementById("popup").style.display = "flex";
+}
+
+function closePopup() {
+    document.getElementById("popup").style.display = "none";
+}
+
+function closeYesPopup() {
+    document.getElementById("yesPopup").style.display = "none";
+}
+
+function createBalloons() {
+    const container = document.getElementById("balloons");
+
+    for (let i = 0; i < 20; i++) {
+        let balloon = document.createElement("div");
+        balloon.classList.add("balloon");
+
+        balloon.style.left = Math.random() * 100 + "vw";
+        balloon.style.backgroundColor = getRandomColor();
+
+        container.appendChild(balloon);
+
+        setTimeout(() => balloon.remove(), 5000);
+    }
+}
+
+function getRandomColor() {
+    const colors = ["#ff4d8d", "#ff85a1", "#ffc2d1", "#bde0fe", "#a2d2ff"];
+    return colors[Math.floor(Math.random() * colors.length)];
+}
+</script>
+
+</body>
+</html>
